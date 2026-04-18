@@ -1,16 +1,81 @@
-# React + Vite
+# Jotform Frontend Challenge Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## User Information
+**Jotform Frontend Challenge — 2026**  
+**Participant:** Deniz Süren
 
-Currently, two official plugins are available:
+---
+## Project Description
+An investigation dashboard built for the "Missing Podo: The Ankara Case" scenario.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Podo was last seen at an event in Ankara — spotted with different people across different locations, then disappeared. This app pulls records from 5 different Jotform form sources and weaves them into a coherent investigation experience.
 
-## React Compiler
+**What you can do:**
+- Browse all suspects and see their records across 5 data sources
+- Follow Podo's last known movements on a live Ankara map
+- See each person's suspicion score based on high-confidence anonymous tips
+- Filter records by source type (checkins, messages, sightings, notes, tips)
+- Search suspects by name
+- View a time-based timeline of each person's activity
+- Fuzzy name matching — "Kagan" and "Kağan" are treated as the same person
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+
+- React + Vite
+- Leaflet / React-Leaflet (map)
+- Jotform API (data source)
+
+---
+
+## Getting Started
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/denizsuren/2026-frontend-challenge-ankara.git
+cd 2026-frontend-challenge-ankara
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Run the development server
+
+```bash
+npm run dev
+```
+
+### 4. Open in browser
+http://localhost:5173
+
+
+## 💡 Notlar
+## Data Sources
+
+| Source | Description |
+|--------|-------------|
+| Checkins | Check-in / appearance records at different locations |
+| Messages | Messages exchanged between people |
+| Sightings | Someone seen with someone else at a specific place |
+| Personal Notes | Personal notes / comments |
+| Anonymous Tips | Tips with varying reliability levels |
+
+---
+
+## Features
+
+- ✅ Data fetching from 5 Jotform API endpoints
+- ✅ Record linking across different data sources
+- ✅ Investigation UI with suspect list and detail view
+- ✅ Search and filter by person and source type
+- ✅ Time-based timeline for each suspect
+- ✅ Live Ankara map with color-coded markers
+- ✅ Suspicion scoring based on anonymous tip confidence
+- ✅ Fuzzy name matching (handles Turkish characters)
+- ✅ Loading, empty, and error state handling
+- ✅ Summary panels: last seen location, last seen with
