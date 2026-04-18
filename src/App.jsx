@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { groupPeopleByFuzzyMatch } from "./utils/fuzzyMatch";
+import Timeline from "./components/Timeline";
 
 // Leaflet default icon fix
 delete L.Icon.Default.prototype._getIconUrl;
@@ -111,7 +112,7 @@ export default function App() {
 // Collect all raw names from all records
   const rawPeopleMap = {};
   allRecords.forEach((r) => {
-    const names = [r.personName, r.suspectName, r.sender, r.receiver, r.witnessName, r.author]
+    const names = [r.personName, r.suspectName, r.sender, r.receiver, r.witnessName, r.author, r.senderName, r.recipientName]
       .filter(Boolean);
     names.forEach((name) => {
       if (!rawPeopleMap[name]) rawPeopleMap[name] = [];
@@ -154,6 +155,7 @@ export default function App() {
     const records = peopleMap[name] || [];
     return records.filter((r) => r.confidence === "high").length;
   };
+  window.__data = data;
 
   return (
     <div style={{ display: "flex", height: "100vh", overflow: "hidden", background: "#080b12" }}>
@@ -399,8 +401,14 @@ export default function App() {
               </div>
             </div>
 
-            {/* RECORDS */}
-            <div style={{ flex: 1, overflowY: "auto", padding: "12px" }}>
+
+            
+            {/* TIMELINE */}
+           <div style={{ flex: 1, overflowY: "auto" }}>
+          <Timeline records={personRecords} personName={selectedPerson} />
+          </div>
+            {/* RECORDS - hidden, timeline shows instead */}
+             <div style={{ display: "none" }}>
               {personRecords
                 .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
                 .map((record) => (
@@ -433,9 +441,9 @@ export default function App() {
                       </div>
                     )}
 
-                    {(record.note || record.message || record.tip || record.content || record.sightingNote) && (
+                    {(record.note || record.message || record.tip || record.content || record.sightingNote || record.text) &&(
                       <div style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: "1.5" }}>
-                        {record.note || record.message || record.tip || record.content || record.sightingNote}
+                        {record.note || record.message || record.tip || record.content || record.sightingNote|| record.text}
                       </div>
                     )}
 
@@ -505,12 +513,42 @@ export default function App() {
     const count = records.length;
 
     return (
-      <Marker
-        key={key}
-        position={coords}
-        icon={coloredIcon(SOURCE_COLORS[dominantSource] || "#fff", count)}
-      >
+  <Marker
+    key={key}
+    position={coords}
+    icon={coloredIcon(SOURCE_COLORS[dominantSource] || "#fff", count)}
+    eventHandlers={{
+      click: () => {
+        // Find the person from this record and select them
+        const person = records[0].personName || 
+                       records[0].suspectName || 
+                       records[0].sender ||
+                       records[0].witnessName ||
+                       records[0].author;
+        if (person) {
+          const canonical = aliasMap[person];
+          if (canonical) {
+            setSelectedPerson(canonical);
+            setActiveSource("all");
+          }
+        }
+      }
+    }}
+  >
         <Popup>
+            <div 
+           onClick={() => {
+           const name = records[0].personName || records[0].suspectName || records[0].sender || records[0].witnessName || records[0].author;
+           if (name) {
+           const canonical = aliasMap[name];
+           if (canonical) setSelectedPerson(canonical);
+           }
+           }}
+         style={{ 
+         fontFamily: "Syne, sans-serif", minWidth: "180px", maxWidth: "220px",
+         cursor: "pointer"
+         }}>
+         </div>
           <div style={{ fontFamily: "Syne, sans-serif", minWidth: "180px", maxWidth: "220px" }}>
             <div style={{ fontWeight: "700", marginBottom: "8px", fontSize: "13px" }}>
               📍 {records[0].location}
