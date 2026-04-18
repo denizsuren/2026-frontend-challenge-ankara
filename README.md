@@ -8,7 +8,7 @@
 ## Project Description
 An investigation dashboard built for the "Missing Podo: The Ankara Case" scenario.
 
-Podo was last seen at an event in Ankara — spotted with different people across different locations, then disappeared. This app pulls records from 5 different Jotform form sources and weaves them into a coherent investigation experience.
+Podo was last seen at an event in Ankara spotted with different people across different locations, then disappeared. This app pulls records from 5 different Jotform form sources and weaves them into a coherent investigation experience.
 
 **What you can do:**
 - Browse all suspects and see their records across 5 data sources
