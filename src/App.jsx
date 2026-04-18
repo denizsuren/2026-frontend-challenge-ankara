@@ -77,6 +77,7 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [activeSource, setActiveSource] = useState("all");
+  const [darkMode, setDarkMode] = useState(true); //dark-light mode
 
   if (loading) return (
     <div style={{
@@ -139,6 +140,8 @@ export default function App() {
         : peopleMap[selectedPerson].filter((r) => r.source === activeSource))
     : [];
 
+
+
   // Records that will be show on maps (records with coordinates)
   const mapRecords = (selectedPerson ? personRecords : allRecords)
     .filter((r) => parseCoords(r.coordinates));
@@ -155,11 +158,10 @@ export default function App() {
     const records = peopleMap[name] || [];
     return records.filter((r) => r.confidence === "high").length;
   };
-  window.__data = data;
-
+  document.body.className = darkMode ? "" : "light"; 
   return (
     <div style={{ display: "flex", height: "100vh", overflow: "hidden", background: "#080b12" }}>
-
+    
       {/* LEFT PANEL */}
       <div style={{
         width: "260px", minWidth: "260px",
@@ -167,6 +169,8 @@ export default function App() {
         display: "flex", flexDirection: "column",
         background: "#0d1320",
       }}>
+      
+       
        {/* Logo */}
 <div style={{ padding: "18px 16px", borderBottom: "1px solid #1f2d45", display: "flex", alignItems: "center", gap: "12px" }}>
   <img
@@ -185,6 +189,18 @@ export default function App() {
       {allRecords.length} kayıt · {people.length} kişi
     </div>
   </div>
+  <button
+    onClick={() => setDarkMode(!darkMode)}
+    style={{
+      marginLeft: "auto",
+      background: "none",
+      fontSize: "20px",
+      padding: "4px",
+      cursor: "pointer",
+    }}
+  >
+    {darkMode ? "☀️" : "🌙"}
+  </button>
 </div>
 
         {/* SEARCH */}
