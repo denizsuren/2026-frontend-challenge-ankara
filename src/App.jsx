@@ -12,7 +12,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-// Renk kodları
+//Color arrangements
 const SOURCE_COLORS = {
   checkins: "#3b82f6",
   messages: "#8b5cf6",
@@ -29,7 +29,7 @@ const SOURCE_LABELS = {
   anonymousTips: "🕵️ İhbar",
 };
 
-// Koordinat parse
+//Coordinate parse
 function parseCoords(str) {
   if (!str) return null;
   const parts = str.split(",").map(Number);
@@ -39,7 +39,7 @@ function parseCoords(str) {
   return null;
 }
 
-// Özel marker rengi
+// Special Marker Colour
 function coloredIcon(color) {
   return L.divIcon({
     className: "",
@@ -55,7 +55,7 @@ function coloredIcon(color) {
   });
 }
 
-// Haritayı seçilen kişiye uçur
+//Show the selected person in the map
 function FlyTo({ coords }) {
   const map = useMap();
   if (coords) map.flyTo(coords, 15, { duration: 1.2 });
@@ -90,7 +90,7 @@ export default function App() {
     </div>
   );
 
-  // Tüm kayıtları birleştir
+  //Unite all records
   const allRecords = [
     ...data.checkins,
     ...data.messages,
@@ -99,7 +99,7 @@ export default function App() {
     ...data.anonymousTips,
   ];
 
-  // Unique kişiler
+  // Unique people
   const peopleMap = {};
   allRecords.forEach((r) => {
     const names = [r.personName, r.suspectName, r.sender, r.receiver, r.witnessName, r.author]
@@ -120,18 +120,18 @@ export default function App() {
         : peopleMap[selectedPerson].filter((r) => r.source === activeSource))
     : [];
 
-  // Haritada gösterilecek kayıtlar (koordinatı olanlar)
+  // Records that will be show on maps (records with coordinates)
   const mapRecords = (selectedPerson ? personRecords : allRecords)
     .filter((r) => parseCoords(r.coordinates));
 
-  // Harita merkezi — Ankara Kızılay
+  // Map center — Ankara Kızılay
   const ANKARA_CENTER = [39.9208, 32.8541];
 
-  // Seçilen kişinin ilk koordinatı
+  // First coordinate of chosen person 
   const firstCoord = personRecords?.find((r) => parseCoords(r.coordinates));
   const flyCoord = firstCoord ? parseCoords(firstCoord.coordinates) : null;
 
-  // Şüphe skoru (high confidence ihbar sayısı)
+  // Suspisicion score (high confidence number of notices)
   const suspicionScore = (name) => {
     const records = peopleMap[name] || [];
     return records.filter((r) => r.confidence === "high").length;
@@ -140,7 +140,7 @@ export default function App() {
   return (
     <div style={{ display: "flex", height: "100vh", overflow: "hidden", background: "#080b12" }}>
 
-      {/* SOL PANEL */}
+      {/* LEFT PANEL */}
       <div style={{
         width: "260px", minWidth: "260px",
         borderRight: "1px solid #1f2d45",
@@ -167,7 +167,7 @@ export default function App() {
   </div>
 </div>
 
-        {/* Arama */}
+        {/* SEARCH */}
         <div style={{ padding: "10px 12px", borderBottom: "1px solid #1f2d45" }}>
           <input
             type="text"
@@ -183,7 +183,7 @@ export default function App() {
           />
         </div>
 
-        {/* Kişi listesi */}
+        {/* PEOPLE LIST */}
         <div style={{ overflowY: "auto", flex: 1 }}>
           {people
             .sort((a, b) => suspicionScore(b) - suspicionScore(a))
@@ -231,7 +231,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* ORTA - Kayıt Detayları */}
+      {/* MID - RECORD DETAILS */}
       <div style={{
         width: "320px", minWidth: "320px",
         borderRight: "1px solid #1f2d45",
@@ -250,7 +250,7 @@ export default function App() {
           </div>
         ) : (
           <>
-            {/* Kişi başlığı */}
+            {/* PERSON HEADER */}
             <div style={{ padding: "16px", borderBottom: "1px solid #1f2d45" }}>
               <h2 style={{ fontSize: "18px", fontWeight: "700", color: "#e8f0fe" }}>
                 {selectedPerson}
@@ -259,7 +259,7 @@ export default function App() {
                 {peopleMap[selectedPerson].length} kayıt
               </p>
 
-              {/* Filtre butonları */}
+              {/* FILTER BUTTONS*/}
               <div style={{ display: "flex", gap: "6px", marginTop: "10px", flexWrap: "wrap" }}>
                 {["all", ...new Set(peopleMap[selectedPerson].map((r) => r.source))].map((src) => (
                   <button
@@ -279,7 +279,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Kayıtlar */}
+            {/* RECORDS */}
             <div style={{ flex: 1, overflowY: "auto", padding: "12px" }}>
               {personRecords
                 .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
@@ -337,9 +337,9 @@ export default function App() {
         )}
       </div>
 
-      {/* SAĞ - HARİTA */}
+      {/* RIGHT - MAP */}
       <div style={{ flex: 1, position: "relative" }}>
-        {/* Harita başlık overlay */}
+        {/* MAP-HEADER-OVERLAY */}
         <div style={{
           position: "absolute", top: "16px", left: "16px", zIndex: 1000,
           background: "rgba(13,19,32,0.9)", backdropFilter: "blur(8px)",
